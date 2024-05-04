@@ -22,25 +22,24 @@ def close_db(error):
 
 @app.route('/2-hbnb/', strict_slashes=False)
 def hbnb():
-    """ HBNB is alive! """
-    states = storage.all(State).values()
-    states = sorted(states, key=lambda k: k.name)
-    st_ct = []
+    # Retrieve states, amenities, and places from storage
+    states = sorted(storage.all(State).values(), key=lambda st: st.name)
+    amenities = sorted(storage.all(Amenity).values(), key=lambda am: am.name)
+    places = sorted(storage.all(Place).values(), key=lambda pl: pl.name)
+    
+    sta_cit = []
+    # Organize states and their cities into a list of tuples
+    sta_cit = [(state, sorted(state.cities, key=lambda city: city.name)) for state in states]
 
-    for state in states:
-        st_ct.append([state, sorted(state.cities, key=lambda k: k.name)])
+    # Generate a random cache ID
+    cache_id = uuid.uuid4()
 
-    amenities = storage.all(Amenity).values()
-    amenities = sorted(amenities, key=lambda k: k.name)
-
-    places = storage.all(Place).values()
-    places = sorted(places, key=lambda k: k.name)
-
+    # Render the template with the retrieved data
     return render_template('2-hbnb.html',
-                           states=st_ct,
+                           states=sta_cit,
                            amenities=amenities,
                            places=places,
-                           cache_id=uuid.uuid4())
+                           cache_id=cache_id)
 
 
 if __name__ == "__main__":

@@ -20,7 +20,7 @@ def close_db(error):
     storage.close()
 
 
-@app.route('/3-hbnb/', strict_slashes=False)
+@app.route('/3-hbnb', strict_slashes=False)
 def hbnb():
     # Retrieve states, amenities, and places from storage
     states = sorted(storage.all(State).values(), key=lambda st: st.name)
